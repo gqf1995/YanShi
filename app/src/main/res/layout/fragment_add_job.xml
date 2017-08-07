@@ -1,0 +1,265 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--个人详情页-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hugehxxxxxxxdp"
+            android:padding="@dimen/mediummdp">
+
+            <ImageView
+                android:id="@+id/person_Image2"
+                android:layout_width="@dimen/hugehxxxxxxdp"
+                android:layout_height="@dimen/hugehxxxxxxdp"
+                android:scaleType="centerInside"
+                android:layout_marginRight="@dimen/smallmdp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mediumhdp"
+                android:layout_toRightOf="@id/person_Image2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/user_name_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="鲁智深"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/bigsp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mediumhdp"
+                android:layout_below="@id/linearLayout1"
+                android:layout_toRightOf="@id/person_Image2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/job_Title_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="隶属：公安局行政部门"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/mediumsp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/find_other_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mediumhdp"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/person_Image2"
+                android:gravity="center_horizontal"
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/bigmdp"
+                    android:layout_height="@dimen/bigmdp"
+                    android:src="@drawable/tongxun"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="查看他人工作安排"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/smallmdp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contact_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mediumhdp"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/person_Image2"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="@dimen/tinyhdp"
+                    android:layout_height="@dimen/tinyhdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="0dp"
+                    android:visibility="gone"
+                    android:background="@drawable/bandian"/>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="@dimen/tinyhdp"
+                    android:layout_height="@dimen/tinyhdp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/phone"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="电话"
+                    android:textColor="@color/font_black_2"
+                    android:textSize="@dimen/mediumsp"
+                    android:paddingLeft="@dimen/mediummdp"
+                    android:gravity="center_vertical"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!--工作安排-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/smallhdp"
+            android:layout_marginTop="@dimen/mediummdp"
+            android:background="@color/lan2"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:layout_width="@dimen/bigmdp"
+                android:layout_height="@dimen/bigmdp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/mediummdp"
+                android:src="@drawable/review"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="工作安排和进度"
+                android:textColor="@color/font_black_1"
+                android:textSize="@dimen/mediumsp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/last_Day_Button"
+                    android:layout_width="@dimen/smallhdp"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:src="@drawable/last_day"/>
+
+                <TextView
+                    android:id="@+id/time_Display_TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/tinyhdp"
+                    android:layout_marginRight="@dimen/tinymdp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/smallmdp"
+                    android:text="06-01"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/mediumsp"/>
+
+                <ImageButton
+                    android:id="@+id/next_Day_Button"
+                    android:layout_width="@dimen/smallhdp"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:src="@drawable/next_day"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mediummdp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/hugehxxxxdp"
+                android:text="工作安排"
+                android:textColor="@color/cornflowerblue"
+                android:textSize="@dimen/smallsp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="进度"
+                android:textColor="@color/cornflowerblue"
+                android:textSize="@dimen/smallsp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/job_Content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/job_RecycerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </android.support.v7.widget.RecyclerView>
+        <!--要情汇报-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/smallhdp"
+            android:layout_marginTop="@dimen/mediummxdp"
+            android:background="@color/lan2"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin">
+
+            <ImageView
+                android:layout_width="@dimen/bigmdp"
+                android:layout_height="@dimen/bigmdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/mediummdp"
+                android:src="@drawable/pingshen"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="要情汇报"
+                android:textColor="@color/font_black_1"
+                android:textSize="@dimen/mediumsp"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/Report_Recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

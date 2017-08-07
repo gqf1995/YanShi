@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.example.hasee.yanshi.MainActivity">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:background="@drawable/toolbar_image"
+        android:layout_height="56dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="信息公告"
+            android:id="@+id/toolbar_Text"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_gravity="right"
+            android:layout_width="30dp"
+            android:id="@+id/friend_button"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/friend"/>
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/container_Framelayout"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </FrameLayout>
+
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:minHeight="55dp"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="@dimen/tinymdp"
+        android:layout_marginBottom="@dimen/bottomBarMargin"
+        >
+    </com.ashokvarma.bottomnavigation.BottomNavigationBar>
+
+
+
+</LinearLayout>

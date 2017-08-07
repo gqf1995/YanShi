@@ -1,0 +1,54 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_height="@dimen/tinyhdp"
+            android:background="@drawable/contact_dialog_bg_shap"
+            android:hint="根据人名搜索"
+            android:paddingLeft="@dimen/smallmdp"
+            android:focusable="true"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/smallsp"
+            android:layout_marginLeft="@dimen/mediummdp"
+           />
+
+        <TextView
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_height="match_parent"
+            android:text="搜索"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gary"/>
+    <ExpandableListView
+        android:id="@+id/expandible_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ExpandableListView>
+
+</LinearLayout>

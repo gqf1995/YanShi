@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">偃师党政办公平台</string>
+    <string name="job">工作安排</string>
+    <string name="report">要情汇报</string>
+    <string name="msg">信息公告</string>
+    <string name="contact">通讯录</string>
+
+</resources>
