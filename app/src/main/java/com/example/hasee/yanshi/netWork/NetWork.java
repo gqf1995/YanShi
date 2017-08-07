@@ -18,6 +18,7 @@ public class NetWork {
     private static ReportFeelingDetailService reportFeelingDetailService;
     private static AddJobService addJobService;
     private static NewApi newApi;
+
                 //创建实例
     public static Retrofit getRetrofit(String url){
         Retrofit retrofit=new Retrofit.Builder()
