@@ -59,6 +59,8 @@ public class ChangePasswordActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         if (nameEditText.getText().toString().equals("")) {
                             nameEditText.setError("请输入用户名");
+                        } else if (!nameEditText.getText().toString().equals(loginUser.getPhone_num())) {
+                            nameEditText.setError("非当前用户名");
                         } else if (oldPassEditText.getText().toString().equals("")) {
                             oldPassEditText.setError("请输入旧密码");
                         } else if (!nameEditText.getText().toString().equals(loginUser.getPassword())) {
