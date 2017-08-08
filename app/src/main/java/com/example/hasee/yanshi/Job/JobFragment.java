@@ -18,6 +18,7 @@ import com.example.hasee.yanshi.Adapter.AutoHeightLayoutManager;
 import com.example.hasee.yanshi.Adapter.JobListAdapter;
 import com.example.hasee.yanshi.Adapter.ReportInfoListAdapter;
 import com.example.hasee.yanshi.Base.BaseFragment;
+import com.example.hasee.yanshi.ChangePasswordActivity;
 import com.example.hasee.yanshi.R;
 import com.example.hasee.yanshi.Report.ReportDetailActivity;
 import com.example.hasee.yanshi.netWork.NetWork;
@@ -34,9 +35,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -72,6 +75,12 @@ public class JobFragment extends BaseFragment {
     TextView userNameTxt;
     @BindView(R.id.button2)
     Button button2;
+    @BindView(R.id.user_position_txt)
+    TextView userPositionTxt;
+    @BindView(R.id.find_other_lin)
+    LinearLayout findOtherLin;
+    @BindView(R.id.contact_lin)
+    LinearLayout contactLin;
 
 
     public static JobFragment newInstance(String param1) {
@@ -85,7 +94,7 @@ public class JobFragment extends BaseFragment {
     public JobFragment() {
     }
 
-    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button,R.id.find_other_lin})
+    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.find_other_lin,R.id.change_lin})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.last_Day_Button:
@@ -97,12 +106,15 @@ public class JobFragment extends BaseFragment {
 
                 break;
             case R.id.find_other_lin:
-                mListener.startNewActivity(new Intent(getActivity(),OtherJobActivity.class));
+                mListener.startNewActivity(new Intent(getActivity(), OtherJobActivity.class));
+
+                break;
+            case R.id.change_lin:
+                mListener.startNewActivity(new Intent(getActivity(), ChangePasswordActivity.class));
 
                 break;
         }
     }
-
 
 
     public interface mListener {
@@ -122,7 +134,7 @@ public class JobFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_job, container, false);
         loginUser = realm.where(LoginUser.class).findFirst();
-        Log.i("gqf","loginUser"+loginUser.toString());
+        Log.i("gqf", "loginUser" + loginUser.toString());
         unbinder = ButterKnife.bind(this, view);
         getReportData(loginUser.getDepartment_id());
         initView();
@@ -132,7 +144,8 @@ public class JobFragment extends BaseFragment {
 
     public void initView() {
         timeDisplayTextView.setText(getTime(0));
-        jobTitleTextView.setText("隶属：" + loginUser.getUser_division() + loginUser.getUser_position());
+        jobTitleTextView.setText("分工：" + loginUser.getUser_division());
+        userPositionTxt.setText("    "+loginUser.getUser_position());
         userNameTxt.setText(loginUser.getName());
         Picasso.with(getContext()).load(NetWork.newUrl + loginUser.getImage()).into(personImage2);
     }
@@ -140,8 +153,14 @@ public class JobFragment extends BaseFragment {
     public void getReportData(int id) {
         Subscription subscription = NetWork.getNewApi().getListReportInfo(id)
                 .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<List<ReportInfo>, Observable<ReportInfo>>() {
+                    @Override
+                    public Observable<ReportInfo> call(List<ReportInfo> seats) {
+                        return Observable.from(seats.subList(0, 5));
+                    }
+                })
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .take(5)//取前5
                 .subscribe(new Observer<List<ReportInfo>>() {
                     @Override
                     public void onCompleted() {
@@ -183,7 +202,7 @@ public class JobFragment extends BaseFragment {
         }
     }
 
-    public void getJobData(final int index,int id, String craeteTime) {
+    public void getJobData(final int index, int id, String craeteTime) {
         Subscription subscription = NetWork.getNewApi().getJobInfo(id, craeteTime)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -201,12 +220,15 @@ public class JobFragment extends BaseFragment {
                     public void onNext(List<JonInfo> JobInfo) {
                         Log.i("gqf", "reportInfos" + JobInfo.toString());
                         switch (index) {
-                            case 0:JobInfoToday=JobInfo;
+                            case 0:
+                                JobInfoToday = JobInfo;
                                 initJobList(JobInfoToday);
                                 break;
-                            case 1:JobInfoTomorrow=JobInfo;
+                            case 1:
+                                JobInfoTomorrow = JobInfo;
                                 break;
-                            case -1:JobInfoYesterday=JobInfo;
+                            case -1:
+                                JobInfoYesterday = JobInfo;
                                 break;
                         }
                     }
@@ -226,26 +248,28 @@ public class JobFragment extends BaseFragment {
             jobListAdapter.update(JobInfo);
         }
     }
+
     List<JonInfo> JobInfoToday;
     List<JonInfo> JobInfoYesterday;
     List<JonInfo> JobInfoTomorrow;
-    String dataStr="今天";
+    String dataStr = "今天";
     int dataIndex = 0;
 
-    public void getThreeDayJob(){
+    public void getThreeDayJob() {
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        getJobData(-1,loginUser.getId(), df.format(new Date(d.getTime() + -1 * 24 * 60 * 60 * 1000)));
-        getJobData(0,loginUser.getId(), df.format(new Date(d.getTime() + 0 * 24 * 60 * 60 * 1000)));
-        getJobData(1,loginUser.getId(), df.format(new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000)));
+        getJobData(-1, loginUser.getDepartment_id(), df.format(new Date(d.getTime() + -1 * 24 * 60 * 60 * 1000)));
+        getJobData(0, loginUser.getDepartment_id(), df.format(new Date(d.getTime() + 0 * 24 * 60 * 60 * 1000)));
+        getJobData(1, loginUser.getDepartment_id(), df.format(new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000)));
     }
+
     public String getTime(int num) {
         if (dataIndex == 0 || dataIndex == 1 || dataIndex == -1) {
-            if (num > 0 &&dataIndex!=1) {
+            if (num > 0 && dataIndex != 1) {
                 dataIndex++;
-            } else if (num < 0 &&dataIndex!=-1) {
+            } else if (num < 0 && dataIndex != -1) {
                 dataIndex--;
-            }else{
+            } else {
                 return dataStr;
             }
             switch (dataIndex) {

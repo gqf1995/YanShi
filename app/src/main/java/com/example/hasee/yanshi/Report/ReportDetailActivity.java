@@ -21,7 +21,6 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by hasee on 2017/7/29.
@@ -49,7 +48,6 @@ public class ReportDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
         ButterKnife.bind(this);
-        compositeSubscription = new CompositeSubscription();
         contentId = getIntent().getIntExtra(CONTENT_ID, 0);
         getData(contentId);
         Log.i("gqf", CONTENT_ID + contentId);
@@ -137,6 +135,10 @@ public class ReportDetailActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (htmlWeb!= null) {
+            htmlWeb.destroy();
+            htmlWeb= null;
+        }
         super.onDestroy();
     }
 }

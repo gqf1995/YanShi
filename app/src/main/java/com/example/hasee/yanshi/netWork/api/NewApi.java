@@ -1,5 +1,6 @@
 package com.example.hasee.yanshi.netWork.api;
 
+import com.example.hasee.yanshi.pojo.NewPojo.ChangePasswordResult;
 import com.example.hasee.yanshi.pojo.NewPojo.DetailReportInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.InfoNotice;
 import com.example.hasee.yanshi.pojo.NewPojo.JonInfo;
@@ -59,4 +60,9 @@ craeteTime:2017-07-27，
     @GET("appInfo/listInfoNotice")
     Observable<List<InfoNotice>> listInfoNotice(@Query("departId") int departId);
 
+    ///appInfo/updatePasswordByUserId?id=10&password=13465
+    //修改密码
+    @FormUrlEncoded
+    @POST("appInfo/updatePasswordByUserId")//要请ID
+    Observable<ChangePasswordResult> updatePasswordByUserId(@Field("id") int id, @Field("password") String password);
 }

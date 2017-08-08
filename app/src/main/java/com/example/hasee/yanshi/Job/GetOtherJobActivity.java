@@ -34,9 +34,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -128,8 +130,14 @@ public class GetOtherJobActivity extends BaseActivity {
     public void getReportData(int id) {
         Subscription subscription = NetWork.getNewApi().getListReportInfo(id)
                 .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<List<ReportInfo>, Observable<ReportInfo>>() {
+                    @Override
+                    public Observable<ReportInfo> call(List<ReportInfo> seats) {
+                        return Observable.from(seats.subList(0,5));
+                    }
+                })
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .take(5)//取前5
                 .subscribe(new Observer<List<ReportInfo>>() {
                     @Override
                     public void onCompleted() {

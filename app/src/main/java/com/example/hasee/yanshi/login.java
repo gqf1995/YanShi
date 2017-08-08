@@ -161,7 +161,7 @@ public class login extends AppCompatActivity {
         } else {
             loginButton.setEnabled(true);
             loginButton.setText("登陆");
-            Toast.makeText(getApplicationContext(), User.getMsg(), Toast.LENGTH_SHORT).show();
+            PopupUtils.showToast(getBaseContext(),User.getMsg());
         }
     }
 
