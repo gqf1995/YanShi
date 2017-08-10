@@ -80,15 +80,22 @@ public class GetOtherJobActivity extends BaseActivity {
     ContactEvent contactEvent;
     Gson gson;
     SysUserBean loginUser;
+    @BindView(R.id.user_position_txt)
+    TextView userPositionTxt;
+    @BindView(R.id.line2)
+    LinearLayout line2;
+    @BindView(R.id.change_lin)
+    LinearLayout changeLin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_other_job);
         ButterKnife.bind(this);
-        gson=new Gson();
-        String json=getIntent().getStringExtra("ContactEvent");
-        contactEvent=gson.fromJson(json,ContactEvent.class);
-        loginUser=contactEvent.getSysUser();
+        gson = new Gson();
+        String json = getIntent().getStringExtra("ContactEvent");
+        contactEvent = gson.fromJson(json, ContactEvent.class);
+        loginUser = contactEvent.getSysUser();
         toolbar.setTitle(loginUser.getName());
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -99,10 +106,11 @@ public class GetOtherJobActivity extends BaseActivity {
             }
         });
         initView();
-        getReportData(loginUser.getId());
+        getReportData(loginUser.getDepartment_id());
         getThreeDayJob();
     }
-    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button,R.id.contact_lin})
+
+    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.contact_lin})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.last_Day_Button:
@@ -112,17 +120,20 @@ public class GetOtherJobActivity extends BaseActivity {
                 timeDisplayTextView.setText(getTime(1));
                 break;
             case R.id.contact_lin:
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" +contactEvent.getSysUser().getPhone_num()));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contactEvent.getSysUser().getPhone_num()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
         }
     }
+
     public void initView() {
         timeDisplayTextView.setText(getTime(0));
-        jobTitleTextView.setText("隶属：" + loginUser.getUser_division() + loginUser.getUser_position());
+        jobTitleTextView.setText("分工：" + loginUser.getUser_division());
+        userPositionTxt.setText("    "+loginUser.getUser_position());
         userNameTxt.setText(loginUser.getName());
         findOtherLin.setVisibility(View.GONE);
+        changeLin.setVisibility(View.GONE);
         contactLin.setVisibility(View.VISIBLE);
         Picasso.with(this).load(NetWork.newUrl + loginUser.getImage()).into(personImage2);
     }
@@ -133,7 +144,7 @@ public class GetOtherJobActivity extends BaseActivity {
                 .flatMap(new Func1<List<ReportInfo>, Observable<ReportInfo>>() {
                     @Override
                     public Observable<ReportInfo> call(List<ReportInfo> seats) {
-                        return Observable.from(seats.subList(0,5));
+                        return Observable.from(seats.subList(0, 5));
                     }
                 })
                 .toList()
@@ -179,7 +190,7 @@ public class GetOtherJobActivity extends BaseActivity {
         }
     }
 
-    public void getJobData(final int index,int id, String craeteTime) {
+    public void getJobData(final int index, int id, String craeteTime) {
         Subscription subscription = NetWork.getNewApi().getJobInfo(id, craeteTime)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -197,12 +208,15 @@ public class GetOtherJobActivity extends BaseActivity {
                     public void onNext(List<JonInfo> JobInfo) {
                         Log.i("gqf", "reportInfos" + JobInfo.toString());
                         switch (index) {
-                            case 0:JobInfoToday=JobInfo;
+                            case 0:
+                                JobInfoToday = JobInfo;
                                 initJobList(JobInfoToday);
                                 break;
-                            case 1:JobInfoTomorrow=JobInfo;
+                            case 1:
+                                JobInfoTomorrow = JobInfo;
                                 break;
-                            case -1:JobInfoYesterday=JobInfo;
+                            case -1:
+                                JobInfoYesterday = JobInfo;
                                 break;
                         }
                     }
@@ -222,26 +236,28 @@ public class GetOtherJobActivity extends BaseActivity {
             jobListAdapter.update(JobInfo);
         }
     }
+
     List<JonInfo> JobInfoToday;
     List<JonInfo> JobInfoYesterday;
     List<JonInfo> JobInfoTomorrow;
-    String dataStr="今天";
+    String dataStr = "今天";
     int dataIndex = 0;
 
-    public void getThreeDayJob(){
+    public void getThreeDayJob() {
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        getJobData(-1,loginUser.getId(), df.format(new Date(d.getTime() + -1 * 24 * 60 * 60 * 1000)));
-        getJobData(0,loginUser.getId(), df.format(new Date(d.getTime() + 0 * 24 * 60 * 60 * 1000)));
-        getJobData(1,loginUser.getId(), df.format(new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000)));
+        getJobData(-1, loginUser.getId(), df.format(new Date(d.getTime() + -1 * 24 * 60 * 60 * 1000)));
+        getJobData(0, loginUser.getId(), df.format(new Date(d.getTime() + 0 * 24 * 60 * 60 * 1000)));
+        getJobData(1, loginUser.getId(), df.format(new Date(d.getTime() + 1 * 24 * 60 * 60 * 1000)));
     }
+
     public String getTime(int num) {
         if (dataIndex == 0 || dataIndex == 1 || dataIndex == -1) {
-            if (num > 0 &&dataIndex!=1) {
+            if (num > 0 && dataIndex != 1) {
                 dataIndex++;
-            } else if (num < 0 &&dataIndex!=-1) {
+            } else if (num < 0 && dataIndex != -1) {
                 dataIndex--;
-            }else{
+            } else {
                 return dataStr;
             }
             switch (dataIndex) {

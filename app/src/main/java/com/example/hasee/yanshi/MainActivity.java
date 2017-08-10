@@ -1,21 +1,37 @@
 package com.example.hasee.yanshi;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.example.hasee.yanshi.Base.BaseApplication;
 import com.example.hasee.yanshi.Contact.ContactDialogFragment;
 import com.example.hasee.yanshi.Contact.ContactFragment;
 import com.example.hasee.yanshi.Job.JobFragment;
 import com.example.hasee.yanshi.Msg.MsgFragment;
 import com.example.hasee.yanshi.Report.ReportFragment;
+import com.example.hasee.yanshi.netWork.NetWork;
 import com.example.hasee.yanshi.pojo.NewPojo.Event.ContactEvent;
+import com.example.hasee.yanshi.update.UpdateInformation;
+import com.example.hasee.yanshi.update.UpdateMsg;
+import com.example.hasee.yanshi.update.UpdateService;
+import com.example.hasee.yanshi.utils.NetUtils;
+import com.example.hasee.yanshi.utils.PopupUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,6 +39,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import static com.example.hasee.yanshi.R.drawable.job;
 
@@ -37,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     private static final int CONTENT_REPORT = 1;
     private static final int CONTENT_MSG= 2;
     private static final int CONTENT_CONTACT = 3;
-
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1234;
     @BindView(R.id.toolbar_Text)
     TextView toolbarText;
     @BindView(R.id.friend_button)
@@ -52,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     ReportFragment reportFragment;
     MsgFragment msgFragment;
     ContactFragment contactFragment;
+    CompositeSubscription compositeSubscription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         ButterKnife.bind(this);
         initFragemnt();
         EventBus.getDefault().register(this);
+        compositeSubscription=new CompositeSubscription();
+        initUpdata();
     }
 
     public void initFragemnt(){
@@ -183,8 +207,79 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         contactDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Transparent);
         contactDialogFragment.show(getSupportFragmentManager(), "LoginRegisteredDialogFragment");
     }
+    AlertDialog.Builder alert;
+    UpdateMsg mUpdateMsg;
+    public void initUpdata(){
+        if (!NetUtils.isConnected(this)) {
+            Toast.makeText(this, "网络尚未连接", Toast.LENGTH_LONG).show();
+        } else {
+            Subscription subscription = NetWork.getAddJobService().getAppVersion()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<UpdateMsg>() {
+                        @Override
+                        public void onCompleted() {
 
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i("gqf",e.toString());
+                        }
+
+                        @Override
+                        public void onNext(UpdateMsg updateMsg) {
+                            mUpdateMsg=updateMsg;
+                            if(!UpdateService.isRun) {
+                                if (BaseApplication.isUpdateForVersion(updateMsg.getApp_version(), UpdateInformation.localVersion)) {
+                                    Log.i("gqf", UpdateInformation.localVersion + "updateMsg" + updateMsg.toString());
+                                    if (alert == null) {
+                                        alert = new AlertDialog.Builder(MainActivity.this);
+                                    }
+                                    alert.setTitle("软件升级")
+                                            .setMessage(updateMsg.getUpdateContent())
+                                            .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //开启更新服务UpdateService
+                                                    //这里为了把update更好模块化，可以传一些updateService依赖的值
+                                                    //如布局ID，资源ID，动态获取的标题,这里以app_name为例
+                                                    if(Build.VERSION.SDK_INT>=23) {//判读版本是否在6.0以上
+                                                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                                != PackageManager.PERMISSION_GRANTED) {
+                                                            //申请WRITE_EXTERNAL_STORAGE权限
+                                                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                                                        } else {
+                                                            PopupUtils.showToast(MainActivity.this, "开始更新，可在通知栏查看进度");
+                                                            startUpdateService(mUpdateMsg);
+                                                        }
+                                                    }else{
+                                                        PopupUtils.showToast(MainActivity.this, "开始更新，可在通知栏查看进度");
+                                                        startUpdateService(mUpdateMsg);
+                                                    }
+                                                }
+                                            })
+                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alert.create().show();
+                                }
+                            }
+                        }
+                    });
+            compositeSubscription.add(subscription);
+        }
+    }
+    //开起后台更新服务
+    public void startUpdateService(UpdateMsg updateMsg) {
+        Intent updateIntent = new Intent(MainActivity.this, UpdateService.class);
+        updateIntent.putExtra("getUpdateContent", "偃师党政办公平台"+ updateMsg.getApp_version());
+        updateIntent.putExtra("getApp_version", updateMsg.getApp_version());
+        updateIntent.putExtra("getApp_url", updateMsg.getApp_url());
+        startService(updateIntent);
+    }
     public void startNewActivity(Intent intent){
         startActivity(intent);
     }
@@ -193,5 +288,6 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        compositeSubscription.unsubscribe();
     }
 }

@@ -7,6 +7,7 @@ import com.example.hasee.yanshi.pojo.NewPojo.JonInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.LoginResult;
 import com.example.hasee.yanshi.pojo.NewPojo.ReportInfo;
 import com.example.hasee.yanshi.pojo.addressBook.AddressBook;
+import com.example.hasee.yanshi.update.UpdateMsg;
 
 import java.util.List;
 
@@ -65,4 +66,8 @@ craeteTime:2017-07-27，
     @FormUrlEncoded
     @POST("appInfo/updatePasswordByUserId")//要请ID
     Observable<ChangePasswordResult> updatePasswordByUserId(@Field("id") int id, @Field("password") String password);
+
+    //获取版本信息
+    @GET("appInfo/getAppVersion")
+    Observable<UpdateMsg> getAppVersion();
 }

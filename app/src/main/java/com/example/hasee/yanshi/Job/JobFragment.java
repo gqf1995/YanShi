@@ -197,6 +197,7 @@ public class JobFragment extends BaseFragment {
                     mListener.startNewActivity(intent);
                 }
             });
+            ReportRecyclerview.setNestedScrollingEnabled(false);
         } else {
             reportInfoListAdapter.update(reportInfos);
         }
