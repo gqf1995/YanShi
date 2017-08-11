@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -48,7 +47,7 @@ import rx.subscriptions.CompositeSubscription;
 import static com.example.hasee.yanshi.R.drawable.job;
 
 
-public class MainActivity extends AppCompatActivity implements JobFragment.mListener,ReportFragment.mListener,MsgFragment.mListener{
+public class MainActivity extends AppCompatActivity implements JobFragment.mListener, ReportFragment.mListener, MsgFragment.mListener {
 
     private static final String JOB_TAG = "JOB_TAG";
     private static final String REPORT_TAG = "REPORT_TAG";
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     private static final String CONTACT_TAG = "CONTACT_TAG";
     private static final int CONTENT_JOB = 0;
     private static final int CONTENT_REPORT = 1;
-    private static final int CONTENT_MSG= 2;
+    private static final int CONTENT_MSG = 2;
     private static final int CONTENT_CONTACT = 3;
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1234;
     @BindView(R.id.toolbar_Text)
@@ -74,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     MsgFragment msgFragment;
     ContactFragment contactFragment;
     CompositeSubscription compositeSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         ButterKnife.bind(this);
         initFragemnt();
         EventBus.getDefault().register(this);
-        compositeSubscription=new CompositeSubscription();
+        compositeSubscription = new CompositeSubscription();
         initUpdata();
     }
 
-    public void initFragemnt(){
+    public void initFragemnt() {
         bottomBar.setMode(BottomNavigationBar.MODE_FIXED)
                 .addItem(new BottomNavigationItem(job, "工作安排").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.infor_gonggao, "要情汇报").setActiveColorResource(R.color.colorPrimary))
@@ -124,11 +124,12 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         });
         setContent(CONTENT_JOB);
     }
+
     public void setContent(int contentHome) {
         switch (contentHome) {
             case CONTENT_JOB:
-                 String job = getResources().getString(R.string.job);
-                toolBarTxt=job;
+                String job = getResources().getString(R.string.job);
+                toolBarTxt = job;
                 jobFragment = (JobFragment) getSupportFragmentManager().findFragmentByTag(JOB_TAG);
                 hideFragment(JOB_TAG);
                 if (jobFragment == null) {
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
                 break;
             case CONTENT_REPORT:
                 String report = getResources().getString(R.string.report);
-                toolBarTxt=report;
+                toolBarTxt = report;
                 reportFragment = (ReportFragment) getSupportFragmentManager().findFragmentByTag(REPORT_TAG);
                 hideFragment(REPORT_TAG);
                 if (reportFragment == null) {
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
                 break;
             case CONTENT_MSG:
                 String msg = getResources().getString(R.string.msg);
-                toolBarTxt=msg;
+                toolBarTxt = msg;
                 msgFragment = (MsgFragment) getSupportFragmentManager().findFragmentByTag(MSG_TAG);
                 hideFragment(MSG_TAG);
                 if (msgFragment == null) {
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
                 break;
             case CONTENT_CONTACT:
                 String contact = getResources().getString(R.string.contact);
-                toolBarTxt=contact;
+                toolBarTxt = contact;
                 contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag(CONTACT_TAG);
                 hideFragment(CONTACT_TAG);
                 if (contactFragment == null) {
@@ -198,18 +199,22 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         }
         toolbarText.setText(toolBarTxt);
     }
+
     ContactDialogFragment contactDialogFragment;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showContactDialog(ContactEvent contactEvent){
+    public void showContactDialog(ContactEvent contactEvent) {
 
         contactDialogFragment = new ContactDialogFragment();
         contactDialogFragment.setContactEvent(contactEvent);
         contactDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Transparent);
         contactDialogFragment.show(getSupportFragmentManager(), "LoginRegisteredDialogFragment");
     }
+
     AlertDialog.Builder alert;
     UpdateMsg mUpdateMsg;
-    public void initUpdata(){
+
+    public void initUpdata() {
         if (!NetUtils.isConnected(this)) {
             Toast.makeText(this, "网络尚未连接", Toast.LENGTH_LONG).show();
         } else {
@@ -224,13 +229,13 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.i("gqf",e.toString());
+                            Log.i("gqf", e.toString());
                         }
 
                         @Override
                         public void onNext(UpdateMsg updateMsg) {
-                            mUpdateMsg=updateMsg;
-                            if(!UpdateService.isRun) {
+                            mUpdateMsg = updateMsg;
+                            if (!UpdateService.isRun) {
                                 if (BaseApplication.isUpdateForVersion(updateMsg.getApp_version(), UpdateInformation.localVersion)) {
                                     Log.i("gqf", UpdateInformation.localVersion + "updateMsg" + updateMsg.toString());
                                     if (alert == null) {
@@ -243,17 +248,12 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
                                                     //开启更新服务UpdateService
                                                     //这里为了把update更好模块化，可以传一些updateService依赖的值
                                                     //如布局ID，资源ID，动态获取的标题,这里以app_name为例
-                                                    if(Build.VERSION.SDK_INT>=23) {//判读版本是否在6.0以上
-                                                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                                                != PackageManager.PERMISSION_GRANTED) {
-                                                            //申请WRITE_EXTERNAL_STORAGE权限
-                                                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                                                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-                                                        } else {
-                                                            PopupUtils.showToast(MainActivity.this, "开始更新，可在通知栏查看进度");
-                                                            startUpdateService(mUpdateMsg);
-                                                        }
-                                                    }else{
+                                                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                            != PackageManager.PERMISSION_GRANTED) {
+                                                        //申请WRITE_EXTERNAL_STORAGE权限
+                                                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                                WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                                                    } else {
                                                         PopupUtils.showToast(MainActivity.this, "开始更新，可在通知栏查看进度");
                                                         startUpdateService(mUpdateMsg);
                                                     }
@@ -272,15 +272,17 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
             compositeSubscription.add(subscription);
         }
     }
+
     //开起后台更新服务
     public void startUpdateService(UpdateMsg updateMsg) {
         Intent updateIntent = new Intent(MainActivity.this, UpdateService.class);
-        updateIntent.putExtra("getUpdateContent", "偃师党政办公平台"+ updateMsg.getApp_version());
+        updateIntent.putExtra("getUpdateContent", "偃师党政办公平台" + updateMsg.getApp_version());
         updateIntent.putExtra("getApp_version", updateMsg.getApp_version());
         updateIntent.putExtra("getApp_url", updateMsg.getApp_url());
         startService(updateIntent);
     }
-    public void startNewActivity(Intent intent){
+
+    public void startNewActivity(Intent intent) {
         startActivity(intent);
     }
 
