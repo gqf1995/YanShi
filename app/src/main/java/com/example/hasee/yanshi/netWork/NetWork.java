@@ -1,11 +1,7 @@
 package com.example.hasee.yanshi.netWork;
 
 import com.example.hasee.yanshi.netWork.api.AddJobService;
-import com.example.hasee.yanshi.netWork.api.AddressBookService;
-import com.example.hasee.yanshi.netWork.api.LoginService;
 import com.example.hasee.yanshi.netWork.api.NewApi;
-import com.example.hasee.yanshi.netWork.api.ReportFeelingDetailService;
-import com.example.hasee.yanshi.netWork.api.ReportFeelingService;
 import com.example.hasee.yanshi.netWork.api.UpdateService;
 import com.example.hasee.yanshi.update.DownloadProgressInterceptor;
 import com.example.hasee.yanshi.update.DownloadProgressListener;
@@ -20,10 +16,6 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetWork {
-    private static AddressBookService addressBookService;
-    private static LoginService loginService;
-    private static ReportFeelingService reportFeelingService;
-    private static ReportFeelingDetailService reportFeelingDetailService;
     private static AddJobService addJobService;
     private static NewApi newApi;
     private static UpdateService updateService;
@@ -36,40 +28,6 @@ public class NetWork {
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
                 .build();
         return retrofit;
-    }
-                //部门
-    public static AddressBookService getAddressBookService(){
-        if(addressBookService==null){
-            Retrofit retrofit=getRetrofit("http://192.168.168.108/municipal/addressBook/getAddressBookDepartmentsBefore/");
-            addressBookService=retrofit.create(AddressBookService.class);
-        }
-      return  addressBookService;
-    }
-     //登录
-    public static LoginService getLoginService(){
-        if(loginService==null){
-            Retrofit retrofit=getRetrofit("http://192.168.168.108/municipal/doLoginApp/");
-            loginService=retrofit.create(LoginService.class);
-        }
-        return  loginService;
-    }
-
-    //要情汇报
-    public static ReportFeelingService getReportFeelingService(){
-        if(reportFeelingService==null){
-            Retrofit retrofit=getRetrofit("http://192.168.168.109/municipal/appInfo/listReportInfo/");
-            reportFeelingService=retrofit.create(ReportFeelingService.class);
-        }
-        return reportFeelingService;
-    }
-
-    //要情汇报详情页
-    public static ReportFeelingDetailService getReportFeelingDetailService(){
-        if(reportFeelingDetailService==null){
-            Retrofit retrofit=getRetrofit("http://192.168.168.109/municipal/appInfo/detailReportInfo/");
-            reportFeelingDetailService=retrofit.create(ReportFeelingDetailService.class);
-        }
-        return reportFeelingDetailService;
     }
 
     //添加工作

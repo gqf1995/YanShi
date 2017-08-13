@@ -25,7 +25,6 @@ public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
 
-    private Context mContext;
     private List<JonInfo> datas;
     private final LayoutInflater mLayoutInflater;
     private MyItemClickListener mItemClickListener;
@@ -36,7 +35,6 @@ public class JobListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public JobListAdapter(Context mContext, List<JonInfo> mDatas) {
-        this.mContext = mContext;
         this.datas = mDatas;
         mLayoutInflater = LayoutInflater.from(mContext);
         compositeSubscription = new CompositeSubscription();

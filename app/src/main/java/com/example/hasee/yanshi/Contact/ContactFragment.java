@@ -69,12 +69,7 @@ public class ContactFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_address_book, container, false);
         unbinder = ButterKnife.bind(this, view);
-        //addressBook=realm.where(AddressBook.class).findFirst();
         gson = new Gson();
-//        addressBook = gson.fromJson(getResources().getString(R.string.demojson), AddressBook.class);
-//        if (addressBook != null) {
-//            initList(addressBook);
-//        }
         initAddressBook();
 
         return view;
@@ -87,12 +82,10 @@ public class ContactFragment extends BaseFragment {
                 .subscribe(new Observer<AddressBook>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("Address_book_fragment", "onCompleted: ");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("Address_book_fragment", "onError: " + e.toString());
 
                     }
 
@@ -114,14 +107,12 @@ public class ContactFragment extends BaseFragment {
 
     public void initList(AddressBook addressBook) {
         Gson gson=new Gson();
-        Log.i("Address_book_fragment", "addressBook: "+addressBook.toString());
         secondLevel = new ArrayList<>();
         thirdLevel = new LinkedHashMap<>();
         data = new ArrayList<>();
         contactEvents=new ArrayList<>();
 
         //第一，二，三层循环分别获取一，二，三级数据，
-        Log.i("Address_book_fragment", "onNext: ");
         //一级数组
         int firstSize = addressBook.getDepartments().size();
         //第一层
@@ -152,7 +143,7 @@ public class ContactFragment extends BaseFragment {
         }
         for (int f = 0; f < secondLevel.size(); f++) {
             for (int j = 0; j < secondLevel.get(f).length; j++) {
-                Log.i("Address_book_fragment", "SecondDatas" + f + j + secondLevel.get(f)[j]);
+                Log.i("gqf", "SecondDatas" + f + j + secondLevel.get(f)[j]);
             }
         }
         threeLevelListAdapter = new ThreeLevelListAdapter(getActivity(), firstDatas, secondLevel, data);

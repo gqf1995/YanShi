@@ -72,12 +72,12 @@ public class OtherJobActivity extends BaseActivity {
                 .subscribe(new Observer<AddressBook>() {
                     @Override
                     public void onCompleted() {
-                        Log.i("Address_book_fragment", "onCompleted: ");
+                        Log.i("gqf", "onCompleted: ");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("Address_book_fragment", "onError: " + e.toString());
+                        Log.i("gqf", "onError: " + e.toString());
 
                     }
 
@@ -98,14 +98,14 @@ public class OtherJobActivity extends BaseActivity {
 
     public void initList(AddressBook addressBook) {
         Gson gson=new Gson();
-        Log.i("Address_book_fragment", "addressBook: "+addressBook.toString());
+        Log.i("gqf", "addressBook: "+addressBook.toString());
         secondLevel = new ArrayList<>();
         thirdLevel = new LinkedHashMap<>();
         data = new ArrayList<>();
         contactEvents=new ArrayList<>();
 
         //第一，二，三层循环分别获取一，二，三级数据，
-        Log.i("Address_book_fragment", "onNext: ");
+        Log.i("gqf", "onNext: ");
         //一级数组
         int firstSize = addressBook.getDepartments().size();
         //第一层
@@ -136,7 +136,7 @@ public class OtherJobActivity extends BaseActivity {
         }
         for (int f = 0; f < secondLevel.size(); f++) {
             for (int j = 0; j < secondLevel.get(f).length; j++) {
-                Log.i("Address_book_fragment", "SecondDatas" + f + j + secondLevel.get(f)[j]);
+                Log.i("gqf", "SecondDatas" + f + j + secondLevel.get(f)[j]);
             }
         }
         threeLevelListAdapter = new ThreeLevelListAdapter(this, firstDatas, secondLevel, data);

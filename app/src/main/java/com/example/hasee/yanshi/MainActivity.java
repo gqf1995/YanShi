@@ -185,16 +185,16 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     }
 
     private void hideFragment(String tag) {
-        if (jobFragment != null && tag != JOB_TAG) {
+        if (jobFragment != null && !tag .equals( JOB_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(jobFragment).commitNow();
         }
-        if (reportFragment != null && tag != REPORT_TAG) {
+        if (reportFragment != null && !tag .equals(REPORT_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(reportFragment).commitNow();
         }
-        if (msgFragment != null && tag != MSG_TAG) {
+        if (msgFragment != null && !tag .equals( MSG_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(msgFragment).commitNow();
         }
-        if (contactFragment != null && tag != CONTACT_TAG) {
+        if (contactFragment != null && !tag.equals(CONTACT_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(contactFragment).commitNow();
         }
         toolbarText.setText(toolBarTxt);
