@@ -88,7 +88,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Looper.prepare();
                 PopupUtils.showToast(mContext,"抱歉程序出现异常，我们将上传错误并在下一个版本修改，3秒后关闭应用。");
                 if (!NetUtils.isConnected(mContext)) {
-                    saveErr();
+                   // saveErr();
                 }else{
                     uploadExceptionToServer(appThrowable);
                 }

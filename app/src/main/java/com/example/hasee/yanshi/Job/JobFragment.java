@@ -99,7 +99,7 @@ public class JobFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.last_Day_Button:
                 timeDisplayTextView.setText(getTime(-1));
-                //int i=100/0;
+               // int i=100/0;
                 break;
             case R.id.next_Day_Button:
                 timeDisplayTextView.setText(getTime(1));

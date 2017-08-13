@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
                                 realm.beginTransaction();
                                 appThrowabl.deleteFromRealm();
                                 realm.commitTransaction();
+                                Log.i("gqf","saveErrToService"+realm.where(AppThrowable.class).findAll().size());
                             }
                         }
                     });
