@@ -99,6 +99,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
        // EventBus.getDefault().post(appThrowable);
         //延时1秒杀死进程
         SystemClock.sleep(5000);
+        subscription.unsubscribe();
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
     }
@@ -157,11 +158,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * 上传异常信息到服务器
      *
      */
+    Subscription subscription;
     public void uploadExceptionToServer(AppThrowable appThrowabl) {
         Log.i("gqf","saveErrToService"+appThrowabl.toString());
         if(!isNetErr) {
             isNetErr=true;
-            Subscription subscription = NetWork.getNewApi().saveAppErr(appThrowabl.getPhone(),
+            subscription = NetWork.getNewApi().saveAppErr(appThrowabl.getPhone(),
                     appThrowabl.getThrowable(), appThrowabl.getTime()
             )
                     .subscribeOn(Schedulers.io())

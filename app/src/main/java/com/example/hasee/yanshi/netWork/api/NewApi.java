@@ -75,5 +75,5 @@ craeteTime:2017-07-27，
     //收集程序异常
     @FormUrlEncoded
     @POST("appInfo/saveAppErr")
-    Observable<BaseResult> saveAppErr(@Field("userphone") String userphone, @Field("msg") String msg,@Field("createtime") String createtime);
+    Observable<BaseResult> saveAppErr(@Field("userPhone") String userPhone, @Field("msg") String msg, @Field("createtime") String createtime);
 }
