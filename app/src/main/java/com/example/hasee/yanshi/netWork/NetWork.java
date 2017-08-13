@@ -1,6 +1,7 @@
 package com.example.hasee.yanshi.netWork;
 
 import com.example.hasee.yanshi.netWork.api.AddJobService;
+import com.example.hasee.yanshi.netWork.api.DemoService;
 import com.example.hasee.yanshi.netWork.api.NewApi;
 import com.example.hasee.yanshi.netWork.api.UpdateService;
 import com.example.hasee.yanshi.update.DownloadProgressInterceptor;
@@ -19,7 +20,7 @@ public class NetWork {
     private static AddJobService addJobService;
     private static NewApi newApi;
     private static UpdateService updateService;
-
+    private static DemoService demoService;
                 //创建实例
     public static Retrofit getRetrofit(String url){
         Retrofit retrofit=new Retrofit.Builder()
@@ -38,9 +39,15 @@ public class NetWork {
         }
         return addJobService;
     }
+    public static DemoService getDemoService(){
+        if(demoService==null){
+            Retrofit retrofit=getRetrofit(newUrl2+"/");
+            demoService=retrofit.create(DemoService.class);
+        }
+        return demoService;
+    }
 
-
-   // public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
+    public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
     public static final String newUrl= "http://1.194.225.66:15968/municipal";
     //http://1.194.225.66/municipal/appInfo/getAppVersion
     public static NewApi getNewApi(){

@@ -25,6 +25,8 @@ import com.example.hasee.yanshi.Job.JobFragment;
 import com.example.hasee.yanshi.Msg.MsgFragment;
 import com.example.hasee.yanshi.Report.ReportFragment;
 import com.example.hasee.yanshi.netWork.NetWork;
+import com.example.hasee.yanshi.pojo.NewPojo.AppThrowable;
+import com.example.hasee.yanshi.pojo.NewPojo.BaseResult;
 import com.example.hasee.yanshi.pojo.NewPojo.Event.ContactEvent;
 import com.example.hasee.yanshi.update.UpdateInformation;
 import com.example.hasee.yanshi.update.UpdateMsg;
@@ -36,8 +38,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     MsgFragment msgFragment;
     ContactFragment contactFragment;
     CompositeSubscription compositeSubscription;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         initFragemnt();
         EventBus.getDefault().register(this);
         compositeSubscription = new CompositeSubscription();
+        realm = Realm.getDefaultInstance();
         initUpdata();
     }
 
@@ -185,13 +192,13 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     }
 
     private void hideFragment(String tag) {
-        if (jobFragment != null && !tag .equals( JOB_TAG)) {
+        if (jobFragment != null && !tag.equals(JOB_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(jobFragment).commitNow();
         }
-        if (reportFragment != null && !tag .equals(REPORT_TAG)) {
+        if (reportFragment != null && !tag.equals(REPORT_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(reportFragment).commitNow();
         }
-        if (msgFragment != null && !tag .equals( MSG_TAG)) {
+        if (msgFragment != null && !tag.equals(MSG_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(msgFragment).commitNow();
         }
         if (contactFragment != null && !tag.equals(CONTACT_TAG)) {
@@ -234,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
 
                         @Override
                         public void onNext(UpdateMsg updateMsg) {
+                            //saveErrToService();
                             mUpdateMsg = updateMsg;
                             if (!UpdateService.isRun) {
                                 if (BaseApplication.isUpdateForVersion(updateMsg.getApp_version(), UpdateInformation.localVersion)) {
@@ -284,6 +292,45 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
 
     public void startNewActivity(Intent intent) {
         startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void popuErrToast(AppThrowable appThrowable){
+        PopupUtils.showToast(this,"抱歉程序出现异常，我们将上传错误并在下一个版本修改，3秒后关闭应用。");
+    }
+
+    public void saveErrToService() {
+        List<AppThrowable> appThrowables = realm.where(AppThrowable.class).findAll();
+        for (int i = 0; i < appThrowables.size(); i++) {
+            final AppThrowable appThrowabl = appThrowables.get(i);
+            Log.i("gqf","saveErrToService"+appThrowabl.toString());
+            Subscription subscription = NetWork.getNewApi().saveAppErr(appThrowabl.getPhone(),
+                    appThrowabl.getThrowable(), appThrowabl.getTime()
+            )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BaseResult>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(BaseResult baseResult) {
+                            if (baseResult.isCode()) {
+                                realm.beginTransaction();
+                                appThrowabl.deleteFromRealm();
+                                realm.commitTransaction();
+                            }
+                        }
+                    });
+            compositeSubscription.add(subscription);
+        }
     }
 
     @Override

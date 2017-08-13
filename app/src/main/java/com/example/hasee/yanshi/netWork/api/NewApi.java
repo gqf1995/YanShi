@@ -1,5 +1,6 @@
 package com.example.hasee.yanshi.netWork.api;
 
+import com.example.hasee.yanshi.pojo.NewPojo.BaseResult;
 import com.example.hasee.yanshi.pojo.NewPojo.ChangePasswordResult;
 import com.example.hasee.yanshi.pojo.NewPojo.DetailReportInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.InfoNotice;
@@ -70,4 +71,9 @@ craeteTime:2017-07-27，
     //获取版本信息
     @GET("appInfo/getAppVersion")
     Observable<UpdateMsg> getAppVersion();
+
+    //收集程序异常
+    @FormUrlEncoded
+    @POST("appInfo/saveAppErr")
+    Observable<BaseResult> saveAppErr(@Field("userphone") String userphone, @Field("msg") String msg,@Field("createtime") String createtime);
 }
