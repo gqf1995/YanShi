@@ -75,14 +75,14 @@ public class NetWork {
     //添加工作
     public static AddJobService getAddJobService(){
         if(addJobService==null){
-            Retrofit retrofit=getRetrofit(newUrl2+"/");
+            Retrofit retrofit=getRetrofit(newUrl+"/");
             addJobService=retrofit.create(AddJobService.class);
         }
         return addJobService;
     }
 
 
-    public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
+   // public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
     public static final String newUrl= "http://1.194.225.66:15968/municipal";
     //http://1.194.225.66/municipal/appInfo/getAppVersion
     public static NewApi getNewApi(){
