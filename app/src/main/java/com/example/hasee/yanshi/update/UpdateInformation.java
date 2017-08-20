@@ -7,7 +7,7 @@ package com.example.hasee.yanshi.update;
 
 public class UpdateInformation {
     public static String appname ="YSService";
-    public static String localVersion = "2.0";// 本地版本
+    public static String localVersion = "2.5";// 本地版本
     public static String versionName = ""; // 本地版本名
     public static int serverVersion = 1;// 服务器版本
     public static int serverFlag = 0;// 服务器标志

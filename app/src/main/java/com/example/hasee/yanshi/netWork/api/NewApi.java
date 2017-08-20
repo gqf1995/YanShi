@@ -2,12 +2,12 @@ package com.example.hasee.yanshi.netWork.api;
 
 import com.example.hasee.yanshi.pojo.NewPojo.BaseResult;
 import com.example.hasee.yanshi.pojo.NewPojo.ChangePasswordResult;
+import com.example.hasee.yanshi.pojo.NewPojo.ContentObj;
 import com.example.hasee.yanshi.pojo.NewPojo.DetailReportInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.InfoNotice;
 import com.example.hasee.yanshi.pojo.NewPojo.JonInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.LoginResult;
 import com.example.hasee.yanshi.pojo.NewPojo.ReportInfo;
-import com.example.hasee.yanshi.pojo.addressBook.AddressBook;
 import com.example.hasee.yanshi.update.UpdateMsg;
 
 import java.util.List;
@@ -50,13 +50,7 @@ craeteTime:2017-07-27，
     @POST("doLoginApp")//要请ID
     Observable<LoginResult> login(@Field("phone_num") String phone_num, @Field("password") String password);
 
-    //通讯录
-    @GET("addressBook/getAddressBookDepartmentsBefore")
-    Observable<AddressBook> getAddressBook();
 
-    //查看他人工作安排名单
-    @GET("addressBook/getOtherLeaderWorkBefore")
-    Observable<AddressBook> getOtherLeaderWorkBefore();
 
     //信息公告
     @GET("appInfo/listInfoNotice")
@@ -76,4 +70,14 @@ craeteTime:2017-07-27，
     @FormUrlEncoded
     @POST("appInfo/saveAppErr")
     Observable<BaseResult> saveAppErr(@Field("userPhone") String userPhone, @Field("msg") String msg, @Field("createtime") String createtime);
+
+
+    //查看他人工作安排名单
+    @GET("addressBook/getOtherLeaderWorkBefore")
+    Observable<ContentObj> getOtherLeaderWorkBefore();
+
+    //通讯录
+    @GET("addressBook/getAddressBookDepartmentsBefore")
+    Observable<ContentObj> getAddressBook();
+
 }

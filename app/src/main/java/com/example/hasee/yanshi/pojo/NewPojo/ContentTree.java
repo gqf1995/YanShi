@@ -48,6 +48,16 @@ public class ContentTree {
     private String text;
     private List<ContentTree> ChildNodes;
 
+    private String department;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     public String getParentnodes() {
         return parentnodes;
     }

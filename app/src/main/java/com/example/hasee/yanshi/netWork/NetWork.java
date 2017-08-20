@@ -39,17 +39,18 @@ public class NetWork {
         }
         return addJobService;
     }
-    public static DemoService getDemoService(){
-        if(demoService==null){
-            Retrofit retrofit=getRetrofit(newUrl2+"/");
-            demoService=retrofit.create(DemoService.class);
-        }
-        return demoService;
-    }
+//    public static DemoService getDemoService(){
+//        if(demoService==null){
+//            Retrofit retrofit=getRetrofit(newUrl2+"/");
+//            demoService=retrofit.create(DemoService.class);
+//        }
+//        return demoService;
+//    }
 
     public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
     public static final String newUrl= "http://1.194.225.66:15968/municipal";
     //http://www.jiashengfei.top:8080/municipal/addressBook/getAddressBookDepartmentsBefore
+    //http://1.194.225.66:15968/municipal/appInfo/updatePasswordByUserId
     public static NewApi getNewApi(){
         if(newApi==null){
             Retrofit retrofit=getRetrofit(newUrl+"/");

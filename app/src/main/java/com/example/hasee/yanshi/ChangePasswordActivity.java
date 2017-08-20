@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.hasee.yanshi.Base.BaseActivity;
+import com.example.hasee.yanshi.dialog.MsgDialog;
 import com.example.hasee.yanshi.netWork.NetWork;
 import com.example.hasee.yanshi.pojo.NewPojo.ChangePasswordResult;
 import com.example.hasee.yanshi.pojo.NewPojo.LoginUser;
@@ -59,21 +60,38 @@ public class ChangePasswordActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         if (nameEditText.getText().toString().equals("")) {
                             nameEditText.setError("请输入用户名");
+                            initShowDialog("请输入用户名!");
                         } else if (!nameEditText.getText().toString().equals(loginUser.getPhone_num())) {
                             nameEditText.setError("非当前用户名");
+                            initShowDialog("非当前用户名!");
                         } else if (oldPassEditText.getText().toString().equals("")) {
                             oldPassEditText.setError("请输入旧密码");
-                        } else if (!nameEditText.getText().toString().equals(loginUser.getPassword())) {
+                            initShowDialog("请输入旧密码!");
+                        } else if (!oldPassEditText.getText().toString().equals(loginUser.getPassword())) {
                             oldPassEditText.setError("旧密码错误");
+                            initShowDialog("旧密码错误!");
                         } else if (newPassEditText.getText().toString().equals("")) {
                             newPassEditText.setError("请输入新密码");
+                            initShowDialog("请输入新密码!");
                         } else if (oldPassEditText.getText().toString().equals(newPassEditText.getText().toString())) {
                             newPassEditText.setError("新旧密码不能相同");
+                            initShowDialog("新旧密码不能相同!");
                         } else {
                             changePassword(loginUser.getId(), newPassEditText.getText().toString());
                         }
                     }
                 });
+    }
+    MsgDialog msgDialog;
+    public void initShowDialog(String title){
+        msgDialog = new MsgDialog(this, R.style.dialog, title, new MsgDialog.OnCloseListener() {
+            @Override
+            public void ok() {
+                msgDialog.dismiss();
+                msgDialog = null;
+            }
+        });
+        msgDialog.showDialog();
     }
 
     public void changePassword(int id, String password) {

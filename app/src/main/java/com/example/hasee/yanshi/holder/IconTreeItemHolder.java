@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.example.hasee.yanshi.R;
 import com.example.hasee.yanshi.pojo.NewPojo.ContentTree;
+import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
 
 /**
@@ -14,7 +15,7 @@ import com.unnamed.b.atv.model.TreeNode;
  */
 public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
     private TextView tvValue;
-    private TextView arrowView;
+    private PrintView arrowView;
 
     public IconTreeItemHolder(Context context) {
         super(context);
@@ -30,11 +31,15 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         final TextView iconView = (TextView) view.findViewById(R.id.icon);
         iconView.setText(context.getResources().getString(value.icon));
 
-        arrowView = (TextView) view.findViewById(R.id.arrow_icon);
+        arrowView = (PrintView) view.findViewById(R.id.arrow_icon);
 
         //if My computer
         if (node.getLevel() == 1) {
             view.findViewById(R.id.btn_delete).setVisibility(View.GONE);
+        }
+
+        if(!value.getContentTree().isHasChildren()){
+            arrowView.setVisibility(View.INVISIBLE);
         }
 
         return view;
@@ -42,7 +47,7 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
 
     @Override
     public void toggle(boolean active) {
-        arrowView.setText(context.getResources().getString(active ? R.string.ic_keyboard_arrow_down : R.string.ic_keyboard_arrow_right));
+        arrowView.setIconText(context.getResources().getString(active ? R.string.ic_keyboard_arrow_down : R.string.ic_keyboard_arrow_right));
     }
 
     public static class IconTreeItem {
@@ -62,5 +67,8 @@ public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem
         public void setContentTree(ContentTree contentTree) {
             this.contentTree = contentTree;
         }
+
+
+
     }
 }

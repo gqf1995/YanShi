@@ -37,6 +37,8 @@ public class ContactDialogFragment extends DialogFragment {
     @BindView(R.id.dimss_btn)
     Button dimssBtn;
     Unbinder unbinder;
+    @BindView(R.id.division_txt)
+    TextView divisionTxt;
 
     public void setContactEvent(ContactEvent contactEvent) {
         this.contactEvent = contactEvent;
@@ -49,7 +51,8 @@ public class ContactDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_fragment_contact, container);
         unbinder = ButterKnife.bind(this, view);
         nameTxt.setText(contactEvent.getSysUser().getName());
-        positionTxt.setText("职位:"+contactEvent.getSysUser().getUser_position());
+        divisionTxt.setText("分工:" +contactEvent.getSysUser().getUser_division());
+        positionTxt.setText( contactEvent.getSysUser().getUser_position());
         return view;
     }
 
@@ -63,18 +66,19 @@ public class ContactDialogFragment extends DialogFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.phone_btn:
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" +contactEvent.getSysUser().getPhone_num()));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contactEvent.getSysUser().getPhone_num()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
                 break;
             case R.id.sms_btn:
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                sendIntent.setData(Uri.parse("smsto:" +contactEvent.getSysUser().getPhone_num()));
+                sendIntent.setData(Uri.parse("smsto:" + contactEvent.getSysUser().getPhone_num()));
                 getActivity().startActivity(sendIntent);
                 break;
             case R.id.dimss_btn:
                 this.dismiss();
                 break;
+
         }
     }
 }

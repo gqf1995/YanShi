@@ -15,6 +15,7 @@ import com.example.hasee.yanshi.pojo.NewPojo.BaseResult;
 import com.example.hasee.yanshi.pojo.NewPojo.LoginUser;
 import com.example.hasee.yanshi.utils.NetUtils;
 import com.example.hasee.yanshi.utils.PopupUtils;
+import com.example.hasee.yanshi.utils.SettingsUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,13 +41,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     //上下文
     private Context mContext;
 
-    public static boolean isNetErr=false;
+    public static boolean isNetErr = false;
     AppThrowable appThrowable;
 
     Realm realm;
     //单例模式
     private static CrashHandler sInstance = new CrashHandler();
-    private CrashHandler() {}
+
+    private CrashHandler() {
+    }
+
     public static CrashHandler getInstance() {
         return sInstance;
     }
@@ -65,7 +69,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Thread.setDefaultUncaughtExceptionHandler(this);
         //获取Context，方便内部使用
         mContext = context.getApplicationContext();
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
     }
 
     /**
@@ -77,29 +81,33 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         //PopupUtils.showToast(mContext,"抱歉程序出现异常，我们将上传错误并在下一个版本修改，3秒后关闭应用。");
-        Log.i("gqf","saveErrToService"+ex.toString());
-        dumpExceptionToSDCard(ex);
-        //上传异常信息到服务器
+        Log.i("gqf", "saveErrToService" + ex.toString());
 
-        new Thread(new Runnable() {
+        if(!SettingsUtils.isSendErr(mContext)) {
+            SettingsUtils.setIsSendErr(mContext,true);
+            dumpExceptionToSDCard(ex);
+            //上传异常信息到服务器
 
-            @Override
-            public void run() {
-                Looper.prepare();
-                PopupUtils.showToast(mContext,"抱歉程序出现异常，我们将上传错误并在下一个版本修改，3秒后关闭应用。");
-                if (!NetUtils.isConnected(mContext)) {
-                   // saveErr();
-                }else{
-                    uploadExceptionToServer(appThrowable);
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    PopupUtils.showToast(mContext, "抱歉程序出现异常，我们将上传错误并在下一个版本修改，3秒后关闭应用。");
+                    if (!NetUtils.isConnected(mContext)) {
+                        // saveErr();
+                    } else {
+                        uploadExceptionToServer(appThrowable);
+                    }
+                    Looper.loop();
                 }
-                Looper.loop();
-            }
-        }).start();
+            }).start();
 
-       // EventBus.getDefault().post(appThrowable);
-        //延时1秒杀死进程
-        SystemClock.sleep(5000);
-        subscription.unsubscribe();
+            // EventBus.getDefault().post(appThrowable);
+            //延时1秒杀死进程
+            SystemClock.sleep(5000);
+            subscription.unsubscribe();
+        }
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
     }
@@ -116,22 +124,22 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
         //以当前时间创建log文件
 
-        StringBuffer stringBuffer=new StringBuffer();
-        appThrowable=new AppThrowable();
+        StringBuffer stringBuffer = new StringBuffer();
+        appThrowable = new AppThrowable();
 
         try {
             //导出手机信息和异常信息
             PackageManager pm = mContext.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
 
-            stringBuffer.append("time: " + time+"\n");
-            stringBuffer.append("Application version: " + pi.versionName+"\n");
-            stringBuffer.append("Application version number: " + pi.versionCode+"\n");
-            stringBuffer.append("android version number: " + Build.VERSION.RELEASE+"\n");
-            stringBuffer.append("android API: " + Build.VERSION.SDK_INT+"\n");
-            stringBuffer.append("phone maker:" + Build.MANUFACTURER+"\n");
-            stringBuffer.append("phone model: " + Build.MODEL+"\n");
-            int lenght= ex.getStackTrace().length;
+            stringBuffer.append("time: " + time + "\n");
+            stringBuffer.append("Application version: " + pi.versionName + "\n");
+            stringBuffer.append("Application version number: " + pi.versionCode + "\n");
+            stringBuffer.append("android version number: " + Build.VERSION.RELEASE + "\n");
+            stringBuffer.append("android API: " + Build.VERSION.SDK_INT + "\n");
+            stringBuffer.append("phone maker:" + Build.MANUFACTURER + "\n");
+            stringBuffer.append("phone model: " + Build.MODEL + "\n");
+            int lenght = ex.getStackTrace().length;
             for (int i = 0; i < lenght; i++) {
                 stringBuffer.append(ex.getStackTrace()[i].toString());
                 stringBuffer.append("\n");
@@ -145,8 +153,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         appThrowable.setTime(time);
     }
 
-    public void saveErr(){
-        if(appThrowable.isNew()&&appThrowable!=null){
+    public void saveErr() {
+        if (appThrowable.isNew() && appThrowable != null) {
             //保存在本地
             appThrowable.setNew(false);
             realm.beginTransaction();
@@ -154,15 +162,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             realm.commitTransaction();
         }
     }
+
     /**
      * 上传异常信息到服务器
-     *
      */
     Subscription subscription;
+
     public void uploadExceptionToServer(AppThrowable appThrowabl) {
-        Log.i("gqf","saveErrToService"+appThrowabl.toString());
-        if(!isNetErr) {
-            isNetErr=true;
+        Log.i("gqf", "saveErrToService" + appThrowabl.toString());
+        if (!isNetErr) {
+            isNetErr = true;
             subscription = NetWork.getNewApi().saveAppErr(appThrowabl.getPhone(),
                     appThrowabl.getThrowable(), appThrowabl.getTime()
             )
@@ -176,18 +185,18 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.i("gqf","saveErrToService"+e.toString());
+                            Log.i("gqf", "saveErrToService" + e.toString());
                         }
 
                         @Override
                         public void onNext(BaseResult baseResult) {
-                            Log.i("gqf","saveErrToService"+baseResult.isCode());
-//                            if (baseResult.isCode()) {
-//                                android.os.Process.killProcess(android.os.Process.myPid());
-//                                System.exit(0);
-//                            } else {
-//                                saveErr();
-//                            }
+                            Log.i("gqf", "saveErrToService" + baseResult.isCode());
+                            //                            if (baseResult.isCode()) {
+                            //                                android.os.Process.killProcess(android.os.Process.myPid());
+                            //                                System.exit(0);
+                            //                            } else {
+                            //                                saveErr();
+                            //                            }
                         }
                     });
         }

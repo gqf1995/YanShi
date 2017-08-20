@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.antfortune.freeline.FreelineCore;
+import com.github.johnkil.print.PrintConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,7 @@ public class BaseApplication extends Application {
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).schemaVersion(2).deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(realmConfig);
         CrashHandler.getInstance().init(this);
+        PrintConfig.initDefault(getAssets(), "fonts/material-icon-font.ttf");
     }
     /**
      * 使用默认字体

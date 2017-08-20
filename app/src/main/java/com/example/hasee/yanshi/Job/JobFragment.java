@@ -3,6 +3,7 @@ package com.example.hasee.yanshi.Job;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,14 +37,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static com.example.hasee.yanshi.R.id.job_Title_TextView;
 
 /**
  * Created by hasee on 2017/7/28.
@@ -58,8 +61,6 @@ public class JobFragment extends BaseFragment {
     ImageView personImage2;
     @BindView(R.id.linearLayout1)
     LinearLayout linearLayout1;
-    @BindView(job_Title_TextView)
-    TextView jobTitleTextView;
     @BindView(R.id.button)
     Button button;
     @BindView(R.id.last_Day_Button)
@@ -85,6 +86,16 @@ public class JobFragment extends BaseFragment {
     @BindView(R.id.contact_lin)
     LinearLayout contactLin;
     MsgDialog msgDialog;
+    @BindView(R.id.job_Title_TextView)
+    TextView jobTitleTextView;
+    @BindView(R.id.line2)
+    LinearLayout line2;
+    @BindView(R.id.change_lin)
+    LinearLayout changeLin;
+    @BindView(R.id.load_more_list_view_ptr_frame)
+    PtrClassicFrameLayout mPtrFrameLayout;
+    @BindView(R.id.root_scroll)
+    NestedScrollView rootScroll;
 
     public static JobFragment newInstance(String param1) {
         Bundle args = new Bundle();
@@ -97,12 +108,12 @@ public class JobFragment extends BaseFragment {
     public JobFragment() {
     }
 
-    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.find_other_lin,R.id.change_lin, R.id.line2})
+    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.find_other_lin, R.id.change_lin, R.id.line2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.last_Day_Button:
                 timeDisplayTextView.setText(getTime(-1));
-               // int i=100/0;
+                // int i=100/0;
                 break;
             case R.id.next_Day_Button:
                 timeDisplayTextView.setText(getTime(1));
@@ -117,11 +128,11 @@ public class JobFragment extends BaseFragment {
 
                 break;
             case R.id.line2:
-                msgDialog=new MsgDialog(getActivity(), R.style.dialog, "分工：" + loginUser.getUser_division(), new MsgDialog.OnCloseListener() {
+                msgDialog = new MsgDialog(getActivity(), R.style.dialog, "分工：" + loginUser.getUser_division(), new MsgDialog.OnCloseListener() {
                     @Override
                     public void ok() {
                         msgDialog.dismiss();
-                        msgDialog=null;
+                        msgDialog = null;
                     }
                 });
                 msgDialog.showDialog();
@@ -153,13 +164,47 @@ public class JobFragment extends BaseFragment {
         getReportData(loginUser.getDepartment_id());
         initView();
         getThreeDayJob();
+        initRefresh();
         return view;
+    }
+
+    public void initRefresh() {
+        mPtrFrameLayout.setLoadingMinTime(1000);
+        mPtrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                // here check list view, not content.
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, rootScroll, header);
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                //实现下拉刷新的功能
+                Log.i("test", "-----onRefreshBegin-----");
+                mPtrFrameLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getReportData(loginUser.getDepartment_id());
+                        getThreeDayJob();
+                    }
+                }, 500);
+            }
+        });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getReportData(loginUser.getDepartment_id());
+            getThreeDayJob();
+        }
     }
 
     public void initView() {
         timeDisplayTextView.setText(getTime(0));
         jobTitleTextView.setText("分工：" + loginUser.getUser_division());
-        userPositionTxt.setText("    "+loginUser.getUser_position());
+        userPositionTxt.setText("    " + loginUser.getUser_position());
         userNameTxt.setText(loginUser.getName());
         Picasso.with(getContext()).load(NetWork.newUrl + loginUser.getImage()).into(personImage2);
     }
@@ -184,10 +229,12 @@ public class JobFragment extends BaseFragment {
                     @Override
                     public void onError(Throwable e) {
                         Log.i("gqf", "getListReportInfo" + e.toString());
+                        mPtrFrameLayout.refreshComplete();
                     }
 
                     @Override
                     public void onNext(List<ReportInfo> reportInfos) {
+                        mPtrFrameLayout.refreshComplete();
                         Log.i("gqf", "getListReportInfo" + reportInfos.toString());
                         initReportList(reportInfos);
                     }

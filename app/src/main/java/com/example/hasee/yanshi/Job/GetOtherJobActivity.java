@@ -3,6 +3,7 @@ package com.example.hasee.yanshi.Job;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.hasee.yanshi.Adapter.ReportInfoListAdapter;
 import com.example.hasee.yanshi.Base.BaseActivity;
 import com.example.hasee.yanshi.R;
 import com.example.hasee.yanshi.Report.ReportDetailActivity;
+import com.example.hasee.yanshi.dialog.MsgDialog;
 import com.example.hasee.yanshi.netWork.NetWork;
 import com.example.hasee.yanshi.pojo.NewPojo.Event.ContactEvent;
 import com.example.hasee.yanshi.pojo.NewPojo.JonInfo;
@@ -34,6 +36,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -86,12 +92,17 @@ public class GetOtherJobActivity extends BaseActivity {
     LinearLayout line2;
     @BindView(R.id.change_lin)
     LinearLayout changeLin;
+    @BindView(R.id.root_scroll)
+    NestedScrollView rootScroll;
+    @BindView(R.id.load_more_list_view_ptr_frame)
+    PtrClassicFrameLayout mPtrFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_other_job);
         ButterKnife.bind(this);
+
         gson = new Gson();
         String json = getIntent().getStringExtra("ContactEvent");
         contactEvent = gson.fromJson(json, ContactEvent.class);
@@ -108,9 +119,12 @@ public class GetOtherJobActivity extends BaseActivity {
         initView();
         getReportData(loginUser.getDepartment_id());
         getThreeDayJob();
+        initRefresh();
     }
 
-    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.contact_lin})
+    MsgDialog msgDialog;
+
+    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.contact_lin, R.id.line2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.last_Day_Button:
@@ -124,13 +138,47 @@ public class GetOtherJobActivity extends BaseActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
+            case R.id.line2:
+                msgDialog = new MsgDialog(this, R.style.dialog, "分工：" + contactEvent.getSysUser().getUser_division(), new MsgDialog.OnCloseListener() {
+                    @Override
+                    public void ok() {
+                        msgDialog.dismiss();
+                        msgDialog = null;
+                    }
+                });
+                msgDialog.showDialog();
+                break;
         }
+    }
+
+    public void initRefresh() {
+        mPtrFrameLayout.setLoadingMinTime(1000);
+        mPtrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                // here check list view, not content.
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, rootScroll, header);
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                //实现下拉刷新的功能
+                Log.i("test", "-----onRefreshBegin-----");
+                mPtrFrameLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getReportData(loginUser.getDepartment_id());
+                        getThreeDayJob();
+                    }
+                }, 500);
+            }
+        });
     }
 
     public void initView() {
         timeDisplayTextView.setText(getTime(0));
         jobTitleTextView.setText("分工：" + loginUser.getUser_division());
-        userPositionTxt.setText("    "+loginUser.getUser_position());
+        userPositionTxt.setText("    " + loginUser.getUser_position());
         userNameTxt.setText(loginUser.getName());
         findOtherLin.setVisibility(View.GONE);
         changeLin.setVisibility(View.GONE);
@@ -158,11 +206,13 @@ public class GetOtherJobActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         Log.i("gqf", "getListReportInfo" + e.toString());
+                        mPtrFrameLayout.refreshComplete();
                     }
 
                     @Override
                     public void onNext(List<ReportInfo> reportInfos) {
                         Log.i("gqf", "getListReportInfo" + reportInfos.toString());
+                        mPtrFrameLayout.refreshComplete();
                         initReportList(reportInfos);
                     }
                 });

@@ -33,6 +33,16 @@ public class SettingsUtils {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putBoolean(PREF_AUTO_LOGIN, newValue).apply();
     }
+    private static final String is_send_err = "issend_err";
 
+    public static boolean isSendErr(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getBoolean(is_send_err, false);
+    }
+
+    public static void setIsSendErr(Context context, boolean newValue) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putBoolean(is_send_err, newValue).apply();
+    }
 
 }

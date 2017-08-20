@@ -1,304 +1,328 @@
-<android.support.v4.widget.NestedScrollView
+<in.srain.cube.views.ptr.PtrClassicFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/load_more_list_view_ptr_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
 
-    <LinearLayout
+    cube_ptr:ptr_duration_to_close="300"
+    cube_ptr:ptr_duration_to_close_header="2000"
+    cube_ptr:ptr_keep_header_when_refresh="true"
+    cube_ptr:ptr_pull_to_fresh="false"
+    cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+    cube_ptr:ptr_resistance="1.7">
+
+    <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!--个人详情页-->
-        <RelativeLayout
+        android:id="@+id/root_scroll"
+        >
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/hugehxxxxxxxdp"
-            android:padding="@dimen/mediummdp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--个人详情页-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/hugehxxxxxxxdp"
+                android:padding="@dimen/mediummdp">
 
-            <ImageView
-                android:id="@+id/person_Image2"
-                android:layout_width="@dimen/hugehxxxxxxdp"
-                android:layout_height="@dimen/hugehxxxxxxdp"
-                android:scaleType="centerInside"
-                android:layout_marginRight="@dimen/smallmdp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+                <ImageView
+                    android:id="@+id/person_Image2"
+                    android:layout_width="@dimen/hugehxxxxxxdp"
+                    android:layout_height="@dimen/hugehxxxxxxdp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="@dimen/smallmdp"
+                    android:scaleType="centerInside"/>
 
+                <LinearLayout
+                    android:id="@+id/linearLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/smallhdp"
+                    android:layout_toRightOf="@id/person_Image2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/user_name_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:paddingBottom="@dimen/mediummdp"
+                        android:text="鲁智深"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/bigsp"/>
+
+                    <TextView
+                        android:id="@+id/user_position_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="1dp"
+                        android:ellipsize="end"
+                        android:gravity="bottom"
+                        android:paddingBottom="@dimen/mediummdp"
+                        android:singleLine="true"
+                        android:textColor="@color/font_black_1"
+                        android:textSize="@dimen/mediumsp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/smallhdp"
+                    android:layout_below="@id/linearLayout1"
+                    android:layout_toRightOf="@id/person_Image2"
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/smallmdp">
+
+                    <TextView
+                        android:id="@+id/job_Title_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mediumsp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/find_other_lin"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bigxmdp"
+                    android:layout_below="@id/line2"
+                    android:layout_toRightOf="@id/person_Image2"
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/bigmdp"
+                        android:layout_height="@dimen/bigmdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_job_list"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/smallmdp"
+                        android:text="查看他人工作安排"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/change_lin"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bigxmdp"
+                    android:layout_below="@id/find_other_lin"
+                    android:layout_marginTop="@dimen/smallmdp"
+                    android:layout_toRightOf="@id/person_Image2"
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/bigmdp"
+                        android:layout_height="@dimen/bigmdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_change_pass"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/smallmdp"
+                        android:text="修改账户密码"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contact_lin"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/mediumhdp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/person_Image2"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/button2"
+                        android:layout_width="@dimen/tinyhdp"
+                        android:layout_height="@dimen/tinyhdp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:background="@drawable/bandian"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="@dimen/tinyhdp"
+                        android:layout_height="@dimen/tinyhdp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/phone"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/mediummdp"
+                        android:text="电话"
+                        android:textColor="@color/font_black_2"
+                        android:textSize="@dimen/mediumsp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!--工作安排-->
             <LinearLayout
-                android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/smallhdp"
-                android:layout_toRightOf="@id/person_Image2"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/mediummdp"
+                android:background="@color/lan2"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:layout_width="@dimen/bigmdp"
+                    android:layout_height="@dimen/bigmdp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/mediummdp"
+                    android:src="@drawable/review"/>
 
                 <TextView
-                    android:id="@+id/user_name_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:text="鲁智深"
-                    android:textColor="@color/black"
-                    android:paddingBottom="@dimen/mediummdp"
-                    android:textSize="@dimen/bigsp"/>
-                <TextView
-                    android:id="@+id/user_position_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:singleLine="true"
-                    android:ellipsize="end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="工作安排和进度"
                     android:textColor="@color/font_black_1"
-                    android:paddingBottom="@dimen/mediummdp"
-                    android:layout_marginBottom="1dp"
-                    android:textSize="@dimen/mediumsp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/line2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/smallhdp"
-                android:layout_below="@id/linearLayout1"
-                android:layout_toRightOf="@id/person_Image2"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:background="?android:selectableItemBackground"
-                android:paddingBottom="@dimen/smallmdp">
-
-                <TextView
-                    android:id="@+id/job_Title_TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/mediumsp"/>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.2"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/last_Day_Button"
+                        android:layout_width="@dimen/smallhdp"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:src="@drawable/last_day"/>
+
+                    <TextView
+                        android:id="@+id/time_Display_TextView"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/tinyhdp"
+                        android:layout_marginRight="@dimen/tinymdp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/smallmdp"
+                        android:text="06-01"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/mediumsp"/>
+
+                    <ImageButton
+                        android:id="@+id/next_Day_Button"
+                        android:layout_width="@dimen/smallhdp"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@null"
+                        android:src="@drawable/next_day"/>
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/find_other_lin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/bigxmdp"
-                android:layout_below="@id/line2"
-                android:layout_toRightOf="@id/person_Image2"
-                android:gravity="center_horizontal"
-                android:clickable="true"
-                android:background="?android:selectableItemBackground"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/bigmdp"
-                    android:layout_height="@dimen/bigmdp"
-                    android:src="@drawable/ic_job_list"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="查看他人工作安排"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/smallmdp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/change_lin"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bigxmdp"
-                android:layout_below="@id/find_other_lin"
-                android:layout_toRightOf="@id/person_Image2"
-                android:gravity="center_horizontal"
-                android:clickable="true"
-                android:layout_marginTop="@dimen/smallmdp"
-                android:background="?android:selectableItemBackground"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/bigmdp"
-                    android:layout_height="@dimen/bigmdp"
-                    android:src="@drawable/ic_change_pass"
-                    android:layout_gravity="center"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="修改账户密码"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/smallmdp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/contact_lin"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mediumhdp"
-                android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@id/person_Image2"
-                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mediummdp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="@dimen/tinyhdp"
-                    android:layout_height="@dimen/tinyhdp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="0dp"
-                    android:visibility="gone"
-                    android:background="@drawable/bandian"/>
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="@dimen/tinyhdp"
-                    android:layout_height="@dimen/tinyhdp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/phone"
-                    />
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:text="电话"
-                    android:textColor="@color/font_black_2"
-                    android:textSize="@dimen/mediumsp"
-                    android:paddingLeft="@dimen/mediummdp"
-                    android:gravity="center_vertical"
-                    />
+                    android:paddingLeft="@dimen/hugehxxxxdp"
+                    android:text="工作安排"
+                    android:textColor="@color/cornflowerblue"
+                    android:textSize="@dimen/smallsp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="进度"
+                    android:textColor="@color/cornflowerblue"
+                    android:textSize="@dimen/smallsp"/>
             </LinearLayout>
-        </RelativeLayout>
-
-        <!--工作安排-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/smallhdp"
-            android:layout_marginTop="@dimen/mediummdp"
-            android:background="@color/lan2"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin">
-
-            <ImageView
-                android:layout_width="@dimen/bigmdp"
-                android:layout_height="@dimen/bigmdp"
-                android:layout_gravity="center"
-                android:layout_marginRight="@dimen/mediummdp"
-                android:src="@drawable/review"/>
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/job_Content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="工作安排和进度"
-                android:textColor="@color/font_black_1"
-                android:textSize="@dimen/mediumsp"/>
+                android:textColor="@color/black"/>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/job_RecycerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+            </android.support.v7.widget.RecyclerView>
+            <!--要情汇报-->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/smallhdp"
+                android:layout_marginTop="@dimen/mediummxdp"
+                android:background="@color/lan2"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
 
-                <ImageButton
-                    android:id="@+id/last_Day_Button"
-                    android:layout_width="@dimen/smallhdp"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:src="@drawable/last_day"/>
+                <ImageView
+                    android:layout_width="@dimen/bigmdp"
+                    android:layout_height="@dimen/bigmdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/mediummdp"
+                    android:src="@drawable/pingshen"/>
 
                 <TextView
-                    android:id="@+id/time_Display_TextView"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/tinyhdp"
-                    android:layout_marginRight="@dimen/tinymdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/smallmdp"
-                    android:text="06-01"
-                    android:textColor="@color/black"
+                    android:text="要情汇报"
+                    android:textColor="@color/font_black_1"
                     android:textSize="@dimen/mediumsp"/>
 
-                <ImageButton
-                    android:id="@+id/next_Day_Button"
-                    android:layout_width="@dimen/smallhdp"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:background="@null"
-                    android:src="@drawable/next_day"/>
-
-
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/mediummdp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/Report_Recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/hugehxxxxdp"
-                android:text="工作安排"
-                android:textColor="@color/cornflowerblue"
-                android:textSize="@dimen/smallsp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="进度"
-                android:textColor="@color/cornflowerblue"
-                android:textSize="@dimen/smallsp"/>
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/job_Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/job_RecycerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-        </android.support.v7.widget.RecyclerView>
-        <!--要情汇报-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/smallhdp"
-            android:layout_marginTop="@dimen/mediummxdp"
-            android:background="@color/lan2"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin">
-
-            <ImageView
-                android:layout_width="@dimen/bigmdp"
-                android:layout_height="@dimen/bigmdp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/mediummdp"
-                android:src="@drawable/pingshen"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="要情汇报"
-                android:textColor="@color/font_black_1"
-                android:textSize="@dimen/mediumsp"/>
-
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/Report_Recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</in.srain.cube.views.ptr.PtrClassicFrameLayout>

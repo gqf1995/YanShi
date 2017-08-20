@@ -35,6 +35,7 @@ import com.example.hasee.yanshi.update.UpdateMsg;
 import com.example.hasee.yanshi.update.UpdateService;
 import com.example.hasee.yanshi.utils.NetUtils;
 import com.example.hasee.yanshi.utils.PopupUtils;
+import com.example.hasee.yanshi.utils.SettingsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     }
 
     public void initFragemnt() {
+        SettingsUtils.setIsSendErr(this,false);
         bottomBar.setMode(BottomNavigationBar.MODE_FIXED)
                 .addItem(new BottomNavigationItem(R.drawable.anpai, "信息公告").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(job, "工作安排").setActiveColorResource(R.color.colorPrimary))

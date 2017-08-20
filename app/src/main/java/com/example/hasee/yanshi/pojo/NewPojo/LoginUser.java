@@ -38,6 +38,16 @@ public class LoginUser extends RealmObject {
     private String user_rank;
     private String updatetime;
 
+    private boolean isErr=false;
+
+    public boolean isErr() {
+        return isErr;
+    }
+
+    public void setErr(boolean err) {
+        isErr = err;
+    }
+
     public String getImage() {
         return image;
     }
