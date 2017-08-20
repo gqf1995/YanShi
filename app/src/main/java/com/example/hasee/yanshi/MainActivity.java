@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -20,10 +21,11 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.hasee.yanshi.Base.BaseApplication;
 import com.example.hasee.yanshi.Contact.ContactDialogFragment;
-import com.example.hasee.yanshi.Contact.ContactFragment;
+import com.example.hasee.yanshi.Contact.ContactTreeFragment;
 import com.example.hasee.yanshi.Job.JobFragment;
 import com.example.hasee.yanshi.Msg.MsgFragment;
 import com.example.hasee.yanshi.Report.ReportFragment;
+import com.example.hasee.yanshi.dialog.PromptingDialog;
 import com.example.hasee.yanshi.netWork.NetWork;
 import com.example.hasee.yanshi.pojo.NewPojo.AppThrowable;
 import com.example.hasee.yanshi.pojo.NewPojo.BaseResult;
@@ -58,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     private static final String REPORT_TAG = "REPORT_TAG";
     private static final String MSG_TAG = "MSG_TAG";
     private static final String CONTACT_TAG = "CONTACT_TAG";
-    private static final int CONTENT_JOB = 0;
-    private static final int CONTENT_REPORT = 1;
-    private static final int CONTENT_MSG = 2;
+    private static final int CONTENT_JOB = 1;
+    private static final int CONTENT_REPORT = 2;
+    private static final int CONTENT_MSG = 0;
     private static final int CONTENT_CONTACT = 3;
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1234;
     @BindView(R.id.toolbar_Text)
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
     JobFragment jobFragment;
     ReportFragment reportFragment;
     MsgFragment msgFragment;
-    ContactFragment contactFragment;
+    ContactTreeFragment ContactTreeFragment;
     CompositeSubscription compositeSubscription;
     Realm realm;
 
@@ -94,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
 
     public void initFragemnt() {
         bottomBar.setMode(BottomNavigationBar.MODE_FIXED)
+                .addItem(new BottomNavigationItem(R.drawable.anpai, "信息公告").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(job, "工作安排").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.infor_gonggao, "要情汇报").setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.anpai, "信息公告").setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.tongxun, "通讯录").setActiveColorResource(R.color.colorPrimary))
-                .setFirstSelectedPosition(0)
+                .setFirstSelectedPosition(1)
                 .initialise();
         bottomBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
@@ -130,6 +132,32 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
             }
         });
         setContent(CONTENT_JOB);
+    }
+    PromptingDialog promptingDialog;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            promptingDialog=new PromptingDialog(this, R.style.dialog, "是否退出", new PromptingDialog.OnCloseListener() {
+                @Override
+                public void ok() {
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(0);
+                }
+
+                @Override
+                public void dimess() {
+                    promptingDialog.dismiss();
+                    promptingDialog=null;
+                }
+            });
+            promptingDialog.showDialog();
+
+        }
+
+        return false;
+
     }
 
     public void setContent(int contentHome) {
@@ -177,14 +205,14 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
             case CONTENT_CONTACT:
                 String contact = getResources().getString(R.string.contact);
                 toolBarTxt = contact;
-                contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag(CONTACT_TAG);
+                ContactTreeFragment = (ContactTreeFragment) getSupportFragmentManager().findFragmentByTag(CONTACT_TAG);
                 hideFragment(CONTACT_TAG);
-                if (contactFragment == null) {
-                    contactFragment = ContactFragment.newInstance(contact);
+                if (ContactTreeFragment == null) {
+                    ContactTreeFragment = ContactTreeFragment.newInstance(contact);
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container_Framelayout, contactFragment, CONTACT_TAG).commit();
+                            .add(R.id.container_Framelayout, ContactTreeFragment, CONTACT_TAG).commit();
                 } else {
-                    getSupportFragmentManager().beginTransaction().show(contactFragment).commitNow();
+                    getSupportFragmentManager().beginTransaction().show(ContactTreeFragment).commitNow();
                 }
                 break;
         }
@@ -201,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         if (msgFragment != null && !tag.equals(MSG_TAG)) {
             getSupportFragmentManager().beginTransaction().hide(msgFragment).commitNow();
         }
-        if (contactFragment != null && !tag.equals(CONTACT_TAG)) {
-            getSupportFragmentManager().beginTransaction().hide(contactFragment).commitNow();
+        if (ContactTreeFragment != null && !tag.equals(CONTACT_TAG)) {
+            getSupportFragmentManager().beginTransaction().hide(ContactTreeFragment).commitNow();
         }
         toolbarText.setText(toolBarTxt);
     }

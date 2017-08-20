@@ -21,6 +21,7 @@ import com.example.hasee.yanshi.Base.BaseFragment;
 import com.example.hasee.yanshi.ChangePasswordActivity;
 import com.example.hasee.yanshi.R;
 import com.example.hasee.yanshi.Report.ReportDetailActivity;
+import com.example.hasee.yanshi.dialog.MsgDialog;
 import com.example.hasee.yanshi.netWork.NetWork;
 import com.example.hasee.yanshi.pojo.NewPojo.JonInfo;
 import com.example.hasee.yanshi.pojo.NewPojo.LoginUser;
@@ -42,6 +43,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static com.example.hasee.yanshi.R.id.job_Title_TextView;
+
 /**
  * Created by hasee on 2017/7/28.
  */
@@ -55,7 +58,7 @@ public class JobFragment extends BaseFragment {
     ImageView personImage2;
     @BindView(R.id.linearLayout1)
     LinearLayout linearLayout1;
-    @BindView(R.id.job_Title_TextView)
+    @BindView(job_Title_TextView)
     TextView jobTitleTextView;
     @BindView(R.id.button)
     Button button;
@@ -81,7 +84,7 @@ public class JobFragment extends BaseFragment {
     LinearLayout findOtherLin;
     @BindView(R.id.contact_lin)
     LinearLayout contactLin;
-
+    MsgDialog msgDialog;
 
     public static JobFragment newInstance(String param1) {
         Bundle args = new Bundle();
@@ -94,7 +97,7 @@ public class JobFragment extends BaseFragment {
     public JobFragment() {
     }
 
-    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.find_other_lin,R.id.change_lin})
+    @OnClick({R.id.last_Day_Button, R.id.next_Day_Button, R.id.find_other_lin,R.id.change_lin, R.id.line2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.last_Day_Button:
@@ -106,13 +109,24 @@ public class JobFragment extends BaseFragment {
 
                 break;
             case R.id.find_other_lin:
-                mListener.startNewActivity(new Intent(getActivity(), OtherJobActivity.class));
+                mListener.startNewActivity(new Intent(getActivity(), OtherJobTreeActivity.class));
 
                 break;
             case R.id.change_lin:
                 mListener.startNewActivity(new Intent(getActivity(), ChangePasswordActivity.class));
 
                 break;
+            case R.id.line2:
+                msgDialog=new MsgDialog(getActivity(), R.style.dialog, "分工：" + loginUser.getUser_division(), new MsgDialog.OnCloseListener() {
+                    @Override
+                    public void ok() {
+                        msgDialog.dismiss();
+                        msgDialog=null;
+                    }
+                });
+                msgDialog.showDialog();
+                break;
+
         }
     }
 

@@ -51,6 +51,11 @@
                   android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
+        <activity android:name=".Job.OtherJobTreeActivity"
+                  android:launchMode="singleTop"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan|stateHidden">
+        </activity>
         <!--其他人员工作安排-->
         <activity android:name=".Job.GetOtherJobActivity"
                   android:launchMode="singleTop"

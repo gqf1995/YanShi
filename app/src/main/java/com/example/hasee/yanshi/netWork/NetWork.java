@@ -49,7 +49,7 @@ public class NetWork {
 
     public static final String newUrl2= "http://www.jiashengfei.top:8080/municipal";
     public static final String newUrl= "http://1.194.225.66:15968/municipal";
-    //http://1.194.225.66/municipal/appInfo/getAppVersion
+    //http://www.jiashengfei.top:8080/municipal/addressBook/getAddressBookDepartmentsBefore
     public static NewApi getNewApi(){
         if(newApi==null){
             Retrofit retrofit=getRetrofit(newUrl+"/");

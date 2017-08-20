@@ -46,6 +46,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/font_black_1"
                     android:paddingBottom="@dimen/mediummdp"
                     android:layout_marginBottom="1dp"
@@ -59,6 +61,8 @@
                 android:layout_below="@id/linearLayout1"
                 android:layout_toRightOf="@id/person_Image2"
                 android:orientation="vertical"
+                android:clickable="true"
+                android:background="?android:selectableItemBackground"
                 android:paddingBottom="@dimen/smallmdp">
 
                 <TextView
@@ -67,6 +71,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text=""
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/black"
                     android:textSize="@dimen/mediumsp"/>
 
