@@ -1,78 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:background="@drawable/login">
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="100dp"
-    android:src="@drawable/yanshi_title"/>
-   <LinearLayout
-       android:layout_width="300dp"
-       android:background="@drawable/edit_backgroud"
-       android:layout_gravity="center_horizontal"
-       android:orientation="vertical"
-       android:layout_height="300dp">
-       <ImageView
-           android:layout_width="60dp"
-           android:layout_height="60dp"
-           android:id="@+id/user_image"
-           android:layout_marginTop="20dp"
-           android:layout_gravity="center_horizontal"
-           android:src="@drawable/login_image"/>
-       <EditText
-           android:layout_width="220dp"
-           android:background="@drawable/name_edit_back"
-           android:id="@+id/name_EditText"
-           android:paddingLeft="45dp"
-           android:hint="账号"
-           android:inputType="phone"
-           android:singleLine="true"
-           android:layout_gravity="center_horizontal"
-           android:layout_marginTop="10dp"
-           android:layout_height="36dp" />
-       <EditText
-           android:layout_width="220dp"
-           android:id="@+id/pass_EditText"
-           android:inputType="textPassword"
-           android:paddingLeft="45dp"
-           android:hint="密码"
-           android:background="@drawable/pass_edit_back"
-           android:layout_gravity="center_horizontal"
-           android:layout_marginTop="16dp"
-           android:layout_height="36dp" />
-       <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="16dp"
-           android:paddingRight="45dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/login"
+              android:orientation="vertical">
 
-           <CheckBox
-               android:id="@+id/login_rememberPassword"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textColor="@color/white"
-               android:layout_alignParentRight="true"
-               android:buttonTint="@color/white"
-               android:text="记住账户密码" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/login_title"/>
 
-       </RelativeLayout>
-       <Button
-           android:layout_width="220dp"
-           android:layout_height="38dp"
-           android:layout_marginTop="16dp"
-           android:id="@+id/login_button"
-           android:layout_gravity="center_horizontal"
-           android:background="@drawable/apply_for_selector"
-           android:text="登陆"
-           android:textColor="@drawable/apply_for_text_color_selector"
-           android:textSize="@dimen/mediumsp"
-           />
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/edit_backgroud"
+        android:orientation="vertical">
 
-   </LinearLayout>
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/login_image"/>
+
+        <EditText
+            android:id="@+id/name_EditText"
+            android:layout_width="220dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/name_edit_back"
+            android:hint="账号"
+            android:inputType="phone"
+            android:paddingLeft="45dp"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/pass_EditText"
+            android:layout_width="220dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/pass_edit_back"
+            android:hint="密码"
+            android:inputType="textPassword"
+            android:paddingLeft="45dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingRight="45dp">
+
+            <CheckBox
+                android:id="@+id/login_rememberPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:buttonTint="@color/white"
+                android:text="记住账户密码"
+                android:textColor="@color/white"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="220dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/apply_for_selector"
+            android:text="登陆"
+            android:textColor="@drawable/apply_for_text_color_selector"
+            android:textSize="@dimen/mediumsp"
+            />
+
+    </LinearLayout>
 </LinearLayout>
