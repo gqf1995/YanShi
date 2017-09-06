@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements JobFragment.mList
         if (!NetUtils.isConnected(this)) {
             Toast.makeText(this, "网络尚未连接", Toast.LENGTH_LONG).show();
         } else {
-            Subscription subscription = NetWork.getAddJobService().getAppVersion()
+            Subscription subscription = NetWork.getNewApi().getAppVersion()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<UpdateMsg>() {

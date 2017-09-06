@@ -32,13 +32,13 @@ public class NetWork {
     }
 
     //添加工作
-    public static AddJobService getAddJobService(){
-        if(addJobService==null){
-            Retrofit retrofit=getRetrofit(newUrl+"/");
-            addJobService=retrofit.create(AddJobService.class);
-        }
-        return addJobService;
-    }
+//    public static AddJobService getAddJobService(){
+//        if(addJobService==null){
+//            Retrofit retrofit=getRetrofit(newUrl+"/");
+//            addJobService=retrofit.create(AddJobService.class);
+//        }
+//        return addJobService;
+//    }
 //    public static DemoService getDemoService(){
 //        if(demoService==null){
 //            Retrofit retrofit=getRetrofit(newUrl2+"/");
